@@ -25,7 +25,7 @@ public class Tetris extends JPanel {
 	private Graphics g;
 	public Timer timer;
 	public Block currentBlock;
-	public Color[][] matrix;
+	public static Color[][] matrix;
 	//change this to whatever object(s) you are animating
 	public int deltaTime=10;
 	//Constructor required by BufferedImage
