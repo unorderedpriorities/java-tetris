@@ -1,52 +1,53 @@
+import java.awt.Color;
 import java.awt.*;
-
-public class TBlock extends Block{
-    public TBlock() {
-        super(new Color(139, 0, 139), new int[][][]{
+public class LBlock extends Block {
+    public LBlock(){
+        super(Color.ORANGE, new int[][][]{
                 {
                         {
-                            0, 0, 0
+                                0, 0, 1
                         },
                         {
-                            0, 1, 0
+                                1, 1, 1
                         },
                         {
-                            1, 1, 1
+                                0, 0, 0
                         }
                 },
                 {
                         {
-                            0, 1, 0
+                                0, 1, 0
                         },
                         {
-                            0, 1, 1
+                                0, 1, 0
                         },
                         {
-                            0, 1, 0
+                                0, 1, 1
                         }
                 },
                 {
                         {
-                            0, 0, 0
+                                0, 0, 0
                         },
                         {
-                            1, 1, 1
+                                1, 1, 1
                         },
                         {
-                            0, 1, 0
+                                1, 0, 0
                         }
                 },
                 {
                         {
-                            0, 1, 0
+                                1, 1, 0
                         },
                         {
-                            1, 1, 0
+                                0, 1, 0
                         },
                         {
-                            0, 1, 0
+                                0, 1, 0
                         }
-                }
+                },
         });
     }
+
 }

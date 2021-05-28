@@ -47,7 +47,10 @@ public class Tetris extends JPanel {
 		queue = new ArrayList<Block>();
 
 		queue.add(new SquareBlock());
-
+		queue.add(new SBlock());
+		queue.add(new LBlock());
+		queue.add(new BLBlock());
+		queue.add(new LongBlock());
 		queue.add(new TBlock());
 		queue.add(new TBlock());
 		queue.add(new TBlock());
@@ -272,8 +275,5 @@ public class Tetris extends JPanel {
 		for(int n=0;n<matrix[0].length;n++){
 			matrix[0][n]=null;
 		}
-
 	}
-	
-
 }
