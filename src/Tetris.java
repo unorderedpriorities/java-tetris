@@ -67,6 +67,9 @@ public class Tetris extends JPanel {
 				}
 
 			}
+			if(e.getKeyCode() == KeyEvent.VK_UP) {
+				currentBlock.rotateRight();
+			}
 		  //INCOMPLETE
 		}
 		public void keyReleased(KeyEvent e) { }
@@ -221,7 +224,7 @@ public class Tetris extends JPanel {
 			}
 		}
 		//move the queue into the current block
-		currentBlock = new SquareBlock();
+		currentBlock = new TBlock();
 		//add something to the queue
 		score=+linescleared;
 	}

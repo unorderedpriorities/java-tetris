@@ -22,6 +22,30 @@ public class Block {
 		this.currentState++;
 		if(this.currentState > 3){
 			this.currentState = 0;
+			if(!canRotate()){
+				this.currentState = 3;
+				return;
+			}
+		}
+		if(!canRotate()){
+			this.currentState--;
+			return;
+		}
+	}
+
+	public void rotateLeft()
+	{
+		this.currentState--;
+		if(!canRotate()){
+			this.currentState++;
+			return;
+		}
+		if(this.currentState < 0){
+			this.currentState = 3;
+			if(!canRotate()){
+				this.currentState = 0;
+				return;
+			}
 		}
 	}
 	public void draw(Graphics g, int x, int y, int size) {
@@ -35,7 +59,6 @@ public class Block {
                 }
             }
         }
-
     }
 	//draws an individual block at the spot in question
 	public void drawBlock(Graphics g, int x, int y, int size) {
@@ -49,13 +72,6 @@ public class Block {
 
 
 	}
-	public void rotateLeft()
-	{
-		this.currentState--;
-		if(this.currentState < 0){
-			this.currentState = 3;
-		}
-	}
 	public int getCurrentState(){
 		return currentState;
 	}
@@ -64,8 +80,19 @@ public class Block {
 	}
 
 	public boolean canRotate(){
+		int[][] state = this.getCurrentStateMap();
+		for(int i=0;i<state.length;i++) {
+			for(int n=0;n<state[i].length;n++){
+				if(state[i][n]==1){
+					if(!(Tetris.matrix[getyLocation()+i][getxLocation()+n]==null)) {
+						return false;
+					}
+				}
+			}
+		}
 		return true;
 	}
+
 	public Color getColor(){
 		return color;
 	}
