@@ -119,6 +119,7 @@ public class Tetris extends JPanel {
 				}
 			}
 			currentBlock.draw(g,(currentBlock.getxLocation()+1)*size,(currentBlock.getyLocation()+1)*size,size);
+			g.setColor(Color.white);
 			g.setFont(new Font("Impact",Font.PLAIN,40));
 			g.drawString(score+"", 0, size);
 
