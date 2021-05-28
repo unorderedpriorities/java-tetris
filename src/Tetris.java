@@ -240,6 +240,7 @@ public class Tetris extends JPanel {
 		currentBlock = queue.get(0);
 		queue.remove(0);
 		queue.add(new TBlock());
+		queue.add(new ZBlock());
 		//add something to the queue
 		score=+linescleared;
 	}
