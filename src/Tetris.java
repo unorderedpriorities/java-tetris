@@ -74,14 +74,14 @@ public class Tetris extends JPanel {
 					currentBlock.setxLocation(currentBlock.getxLocation()+1);
 				}
 
-			}
-			if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+
+			} else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
 				if(canMove(false)) {
 					currentBlock.setxLocation(currentBlock.getxLocation()-1);
 				}
 
-			}
-			if(e.getKeyCode() == KeyEvent.VK_UP) {
+			
+			} else if(e.getKeyCode() == KeyEvent.VK_UP) {
 				currentBlock.rotateRight();
 			}
 		  //INCOMPLETE
