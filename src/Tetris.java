@@ -27,6 +27,7 @@ public class Tetris extends JPanel {
 	private Graphics g;
 	public Timer timer;
 	public static Block currentBlock;
+	public static Block heldBlock;
 	public static Color[][] matrix;
 	public static int score;
 	public static ArrayList<Block> queue;
@@ -77,7 +78,23 @@ public class Tetris extends JPanel {
 				currentBlock.rotateRight();
 			} else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
 				hardDrop();
+			} else if(e.getKeyCode() == KeyEvent.VK_C) {
+				if(heldBlock==null) {
+					heldBlock=currentBlock;
+					heldBlock.setxLocation(5);
+					heldBlock.setyLocation(0);
+					currentBlock=queue.remove(0);
+					randomBlock();
+
+				} else {
+					Block temp = heldBlock;
+					heldBlock=currentBlock;
+					heldBlock.setyLocation(0);
+					heldBlock.setxLocation(5);
+					currentBlock=temp;
+				}
 			}
+
 		  //INCOMPLETE
 		}
 		public void keyReleased(KeyEvent e) { }
@@ -116,6 +133,14 @@ public class Tetris extends JPanel {
 			g.setColor(Color.white);
 			g.setFont(new Font("Impact",Font.PLAIN,40));
 			g.drawString(score+"", 0, size);
+
+
+			if(!(heldBlock==null)) {
+				heldBlock.draw(g, 650, 100, size);
+			}
+			for(int i=0;i<queue.size();i++) {
+				queue.get(i).draw(g, 500, 100+150*i, size);
+			}
 
 
 
