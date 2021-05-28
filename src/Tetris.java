@@ -46,7 +46,8 @@ public class Tetris extends JPanel {
 		currentBlock = new SquareBlock();
 		queue = new ArrayList<Block>();
 		queue.add(new SquareBlock());
-
+		queue.add(new TBlock());
+		queue.add(new ZBlock());
 		
 
 		//set up and start the Timer
