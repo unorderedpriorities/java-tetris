@@ -1,6 +1,7 @@
 
 //required import statements
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -105,6 +106,8 @@ public class Tetris extends JPanel {
 				}
 			}
 			currentBlock.draw(g,(currentBlock.getxLocation()+1)*size,(currentBlock.getyLocation()+1)*size,size);
+			g.setFont(new Font("Impact",Font.BOLD,40));
+			g.drawString(score+"", 0, size);
 
 
 
