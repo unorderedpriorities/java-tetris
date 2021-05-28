@@ -8,8 +8,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-
+import javax.sound.sampled.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -36,6 +38,11 @@ public class Tetris extends JPanel {
 	public int currentTime=0;
 	public int dropTime=200;
 	//Constructor required by BufferedImage
+
+	//sound hell
+	public AudioFormat audioFormat;
+    public AudioInputStream audioInputStream;
+    public Clip clip;
 	public Tetris() {
 		//set up Buffered Image and Graphics objects
 		image =  new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -48,6 +55,32 @@ public class Tetris extends JPanel {
 		queue = new ArrayList<Block>();
 		for(int i=0;i<5;i++) {
 			randomBlock();
+		}
+		Clip line;
+		File soundFile = new File("Tetris.wav");
+		try {
+		audioInputStream = AudioSystem.getAudioInputStream(soundFile);
+		} catch(IOException e) {
+			//shit.
+		} catch(UnsupportedAudioFileException e) {
+			//whoops.
+		}
+		audioFormat = audioInputStream.getFormat();
+		System.out.println(audioFormat);
+		DataLine.Info info = new DataLine.Info(Clip.class, audioFormat); // format is an AudioFormat object
+		if (!AudioSystem.isLineSupported(info)) {
+		// Handle the error.
+		}
+		// Obtain and open the line.
+		try {
+			line = (Clip) AudioSystem.getLine(info);
+			line.open(audioInputStream);
+			line.start();
+		} catch (LineUnavailableException ex) {
+			
+		//... 
+		} catch (IOException e) {
+			//i have no clue how to do this.
 		}
 		
 
