@@ -14,7 +14,7 @@ public class Block {
 		this.blockStates = blockStates;
 		this.color = color;
 		currentState = 0;
-		xLocation=5;
+		xLocation=3;
 		yLocation=0;
 	}
 

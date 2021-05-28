@@ -1,6 +1,7 @@
 
 //required import statements
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +29,7 @@ public class Tetris extends JPanel {
 	public static Block currentBlock;
 	public static Color[][] matrix;
 	public static int score;
+	public static ArrayList<Block> queue;
 	//change this to whatever object(s) you are animating
 	public int deltaTime=10;
 	public int currentTime=0;
@@ -42,7 +44,9 @@ public class Tetris extends JPanel {
 		matrix = new Color[20][10];
 		score = 0;
 		currentBlock = new SquareBlock();
-	
+		queue = new ArrayList<Block>();
+		queue.add(new SquareBlock());
+
 		
 
 		//set up and start the Timer
@@ -105,6 +109,8 @@ public class Tetris extends JPanel {
 				}
 			}
 			currentBlock.draw(g,(currentBlock.getxLocation()+1)*size,(currentBlock.getyLocation()+1)*size,size);
+			g.setFont(new Font("Impact",Font.BOLD,40));
+			g.drawString(score+"", 0, size);
 
 
 
@@ -224,7 +230,9 @@ public class Tetris extends JPanel {
 			}
 		}
 		//move the queue into the current block
-		currentBlock = new TBlock();
+		currentBlock = queue.get(0);
+		queue.remove(0);
+		queue.add(new SquareBlock());
 		//add something to the queue
 		score=+linescleared;
 	}
