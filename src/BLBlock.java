@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.*;
 public class BLBlock extends Block {
     public BLBlock(){
         super(Color.BLUE, new int[][][]{

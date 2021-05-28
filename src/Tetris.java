@@ -45,18 +45,10 @@ public class Tetris extends JPanel {
 		score = 0;
 		currentBlock = new SquareBlock();
 		queue = new ArrayList<Block>();
-
-		queue.add(new SquareBlock());
-		queue.add(new SBlock());
-		queue.add(new LBlock());
-		queue.add(new BLBlock());
-		queue.add(new LongBlock());
-		queue.add(new TBlock());
-		queue.add(new TBlock());
-		queue.add(new TBlock());
-
-		queue.add(new TBlock());
-		queue.add(new ZBlock());
+		for(int i=0;i<5;i++) {
+			randomBlock();
+		}
+		
 
 
 		//set up and start the Timer
@@ -83,6 +75,8 @@ public class Tetris extends JPanel {
 			
 			} else if(e.getKeyCode() == KeyEvent.VK_UP) {
 				currentBlock.rotateRight();
+			} else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+				hardDrop();
 			}
 		  //INCOMPLETE
 		}
@@ -127,11 +121,38 @@ public class Tetris extends JPanel {
 
 			repaint();
 			currentTime+=deltaTime;
-			if(currentTime>1000*20) {
+			if(currentTime>1000*20&&currentTime<1000*40) {
 				dropTime=150;
 			}
 		}
 		
+	}
+	public static void hardDrop() {
+		while(!isTouching()) {
+			currentBlock.setyLocation(currentBlock.getyLocation()+1);
+		}	
+		onContact();
+		
+
+
+	}
+	public static void randomBlock() {
+		int rando=(int)(Math.random()*7);
+		if(rando==0) {
+			queue.add(new SquareBlock());
+		} else if(rando==1) {
+			queue.add(new TBlock());
+		} else if(rando==2) {
+			queue.add(new ZBlock());
+		} else if(rando==3) {
+			queue.add(new BLBlock());
+		} else if(rando==4) {
+			queue.add(new LBlock());
+		} else if(rando==5) {
+			queue.add(new LongBlock());
+		} else {
+			queue.add(new SBlock());
+		}
 	}
 	public static boolean canMove(boolean isRight) {
 		if(isRight){
@@ -246,8 +267,7 @@ public class Tetris extends JPanel {
 		//move the queue into the current block
 		currentBlock = queue.get(0);
 		queue.remove(0);
-		queue.add(new TBlock());
-		queue.add(new ZBlock());
+		randomBlock();
 		//add something to the queue
 		score=+linescleared;
 	}
