@@ -33,13 +33,13 @@ public class Tetris extends JPanel {
 	//change this to whatever object(s) you are animating
 	public int deltaTime=10;
 	public int currentTime=0;
-	public int dropTime=100;
+	public int dropTime=200;
 	//Constructor required by BufferedImage
 	public Tetris() {
 		//set up Buffered Image and Graphics objects
 		image =  new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = image.getGraphics();
-		g.setColor(Color.blue);
+		g.setColor(Color.black.brighter());
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		matrix = new Color[20][10];
 		score = 0;
@@ -94,7 +94,7 @@ public class Tetris extends JPanel {
 			if(currentTime%dropTime==0) {
 				dropLogic();
 			}
-			g.setColor(Color.blue);
+			g.setColor(Color.black.brighter());
 			g.fillRect(0, 0, WIDTH, HEIGHT);
 			//draws grid
 			//vertical lines
@@ -123,6 +123,9 @@ public class Tetris extends JPanel {
 
 			repaint();
 			currentTime+=deltaTime;
+			if(currentTime>1000*20) {
+				dropTime=150;
+			}
 		}
 		
 	}

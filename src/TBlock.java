@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class TBlock extends Block{
     public TBlock() {
-        super(new Color(139, 0, 139), new int[][][]{
+        super(new Color(138, 0, 139), new int[][][]{
                 {
                         {
                             0, 0, 0, 0
