@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.*;
 public class LongBlock extends Block {
     public LongBlock(){
         super(new Color(0, 255, 255), new int[][][]{

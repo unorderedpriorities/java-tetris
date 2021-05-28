@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.*;
 public class SBlock extends Block {
     public SBlock(){
         super(Color.GREEN, new int[][][]{

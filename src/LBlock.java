@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.*;
 public class LBlock extends Block {
     public LBlock(){
         super(Color.ORANGE, new int[][][]{

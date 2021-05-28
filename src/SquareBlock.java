@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.awt.*;
 public class SquareBlock extends Block {
     public SquareBlock(){
         super(Color.yellow, new int[][][]{

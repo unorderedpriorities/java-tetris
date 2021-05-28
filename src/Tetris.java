@@ -69,7 +69,7 @@ public class Tetris extends JPanel {
 		System.out.println(audioFormat);
 		DataLine.Info info = new DataLine.Info(Clip.class, audioFormat); // format is an AudioFormat object
 		if (!AudioSystem.isLineSupported(info)) {
-		// Handle the error.
+		// Handling the error.
 		}
 		// Obtain and open the line.
 		try {
