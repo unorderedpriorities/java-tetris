@@ -45,10 +45,16 @@ public class Tetris extends JPanel {
 		score = 0;
 		currentBlock = new SquareBlock();
 		queue = new ArrayList<Block>();
+
 		queue.add(new SquareBlock());
+
+		queue.add(new TBlock());
+		queue.add(new TBlock());
+		queue.add(new TBlock());
+
 		queue.add(new TBlock());
 		queue.add(new ZBlock());
-		
+
 
 		//set up and start the Timer
 		timer = new Timer(deltaTime, new TimerListener());
@@ -110,7 +116,7 @@ public class Tetris extends JPanel {
 				}
 			}
 			currentBlock.draw(g,(currentBlock.getxLocation()+1)*size,(currentBlock.getyLocation()+1)*size,size);
-			g.setFont(new Font("Impact",Font.BOLD,40));
+			g.setFont(new Font("Impact",Font.PLAIN,40));
 			g.drawString(score+"", 0, size);
 
 
@@ -233,7 +239,7 @@ public class Tetris extends JPanel {
 		//move the queue into the current block
 		currentBlock = queue.get(0);
 		queue.remove(0);
-		queue.add(new SquareBlock());
+		queue.add(new TBlock());
 		//add something to the queue
 		score=+linescleared;
 	}
