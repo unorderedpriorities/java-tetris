@@ -28,6 +28,7 @@ public class Tetris extends JPanel {
 	public static Block currentBlock;
 	public static Color[][] matrix;
 	public static int score;
+	public static ArrayList<Block> queue;
 	//change this to whatever object(s) you are animating
 	public int deltaTime=10;
 	public int currentTime=0;
@@ -42,6 +43,8 @@ public class Tetris extends JPanel {
 		matrix = new Color[20][10];
 		score = 0;
 		currentBlock = new SquareBlock();
+		queue = new ArrayList<Block>();
+		queue.add(new SquareBlock());
 	
 		
 
@@ -221,7 +224,9 @@ public class Tetris extends JPanel {
 			}
 		}
 		//move the queue into the current block
-		currentBlock = new SquareBlock();
+		currentBlock = queue.get(0);
+		queue.remove(0);
+		queue.add(new SquareBlock());
 		//add something to the queue
 		score=+linescleared;
 	}
