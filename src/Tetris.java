@@ -38,6 +38,7 @@ public class Tetris extends JPanel {
 	public Timer timer;
 	public static Block currentBlock;
 	public static Block heldBlock;
+	public static Block ghostBlock;
 	//the matrix that represents the dropped pieces
 	public static Color[][] matrix;
 	public static int score;
@@ -77,7 +78,11 @@ public class Tetris extends JPanel {
 		score = 0;
 		//the current block has not been swapped
 		hasHeld=false;
-		currentBlock = randomBlock();;
+		currentBlock = randomBlock();
+		ghostBlock = new Block(currentBlock);
+
+
+
 		queue = new ArrayList<Block>();
 		for(int i=0;i<5;i++) {
 			queue.add(randomBlock());
@@ -178,7 +183,7 @@ public class Tetris extends JPanel {
 	private class TimerListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(isTouching()) {
+			if(isTouching(currentBlock)) {
 				if(groundTime<dropLock) {
 					groundTime+=deltaTime;
 				} else {
@@ -190,6 +195,12 @@ public class Tetris extends JPanel {
 					currentBlock.setyLocation(currentBlock.getyLocation()+1);		
 				}
 			}
+			ghostBlock = new Block(currentBlock);
+			while(!isTouching(ghostBlock)) {
+				ghostBlock.setyLocation(ghostBlock.getyLocation()+1);
+			}
+
+
 			g.setColor(Color.black.brighter());
 			g.fillRect(0, 0, WIDTH, HEIGHT);
 			//draws grid
@@ -211,6 +222,8 @@ public class Tetris extends JPanel {
 					}
 				}
 			}
+			ghostBlock.draw(g,(ghostBlock.getxLocation()+1)*size,(ghostBlock.getyLocation()+1)*size,size);
+
 			currentBlock.draw(g,(currentBlock.getxLocation()+1)*size,(currentBlock.getyLocation()+1)*size,size);
 			g.setColor(Color.white);
 			g.setFont(new Font("Impact",Font.PLAIN,40));
@@ -228,14 +241,16 @@ public class Tetris extends JPanel {
 
 			repaint();
 			currentTime+=deltaTime;
+			//check to see if drop speed should be sped up
 			if(currentTime>1000*20&&currentTime<1000*40) {
 				dropTime=150;
 			}
 		}
 		
 	}
+	//moves the block down until it hits the ground
 	public static void hardDrop() {
-		while(!isTouching()) {
+		while(!isTouching(currentBlock)) {
 			currentBlock.setyLocation(currentBlock.getyLocation()+1);
 		}	
 		onContact();
@@ -243,6 +258,7 @@ public class Tetris extends JPanel {
 
 
 	}
+	//chooses a new block randomly
 	public static Block randomBlock() {
 		int rando=(int)(Math.random()*7);
 		if(rando==0) {
@@ -261,7 +277,9 @@ public class Tetris extends JPanel {
 			return new SBlock();
 		}
 	}
+	//checks each element of where the block state map would be against the matrix of dropped blocks, if there's no overlap it's all good
 	public static boolean canMove(boolean isRight) {
+		//checks to see if the block will be moved to the right or the left
 		if(isRight){
 			int[][] state = currentBlock.getCurrentStateMap();
 			for(int i=0;i<state.length;i++) {
@@ -310,7 +328,7 @@ public class Tetris extends JPanel {
 	//to be called on a drop frame
 
 	//determines whether the block will hit something when it goes down
-	public static boolean isTouching() {
+	public static boolean isTouching(Block currentBlock) {
 		int[][] state = currentBlock.getCurrentStateMap();
         for(int i=0;i<state.length;i++) {
             for(int n=0;n<state[i].length;n++){
@@ -362,12 +380,12 @@ public class Tetris extends JPanel {
 				moveDown(i);
 			}
 		}
-		//move the queue into the current block
-		currentBlock = queue.get(0);
+		//move the top of the queue into the current block
+		currentBlock = queue.remove(0);
+		//allows the held block to be taken again
 		hasHeld=false;
-		queue.remove(0);
-		queue.add(randomBlock());
 		//add something to the queue
+		queue.add(randomBlock());
 		linescleared+=currentlinescleared;
 		score=score+currentlinescleared;
 	}
