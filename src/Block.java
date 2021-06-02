@@ -18,6 +18,7 @@ public class Block {
 		yLocation=0;
 	}
 
+	//Attempts to rotate the block to the right direction, so all the checks happen in canRotate and reverts back to previous state if it cant
 	public void rotateRight(){
 		this.currentState++;
 		if(this.currentState > 3){
@@ -100,6 +101,7 @@ public class Block {
 							returnval = true;
 						}
 					}**/
+					//This checks if its out of bounds of the grid or if theres a piece at the location, basically checking if the rotation is legal
 					if((yLoc+i > 19 || xLoc+n > 9) || (yLoc+i < 0 || xLoc+n < 0) || !(Tetris.matrix[yLoc+i][xLoc+n]==null)) {
 						returnval = false;
 						break;
@@ -107,11 +109,12 @@ public class Block {
 						returnval = true;
 					}
 				}
-				if(returnval == false){
+				if(!returnval){
 					break;
 				}
 			}
-			if(returnval == true){
+			if(returnval){
+				//change hte xLocation if we've shifted it over for the wall-kick
 				setxLocation(xLoc);
 				break;
 			}
