@@ -29,6 +29,7 @@ public class Tetris extends JPanel {
 	//set the initial width and height of your image
 	private static final int WIDTH = 800;
 	private static final int HEIGHT = 1000;
+	//how many pixels per side of a tetronimo block
 	private static int size = 40;
 
 	//required global variables (initialize these in the constructor) 
@@ -37,36 +38,49 @@ public class Tetris extends JPanel {
 	public Timer timer;
 	public static Block currentBlock;
 	public static Block heldBlock;
+	//the matrix that represents the dropped pieces
 	public static Color[][] matrix;
 	public static int score;
 	public static int linescleared;
+	//whether the down key is pressed
 	public static boolean fastFalling;
+	//whether the block has already been swapped for the held block
 	public static boolean hasHeld;
+	//the blocks waiting to be dropped
 	public static ArrayList<Block> queue;
-	//change this to whatever object(s) you are animating
 	public int deltaTime=10;
 	public int currentTime=0;
+	//ms until dropping down one
 	public int dropTime=200;
+	//ms until drop locking
+	public int dropLock=500;
+	//ms spent touching ground
+	public int groundTime=0;
+
 	
-	//Constructor required by BufferedImage
 
 	//sound hell
 	public AudioFormat audioFormat;
     public AudioInputStream audioInputStream;
     public Clip clip;
+
 	public Tetris() {
 		//set up Buffered Image and Graphics objects
 		image =  new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = image.getGraphics();
+		//background color of black
 		g.setColor(Color.black.brighter());
 		g.fillRect(0, 0, WIDTH, HEIGHT);
+		//creates matrix
 		matrix = new Color[20][10];
+		//score starts at zero
 		score = 0;
+		//the current block has not been swapped
 		hasHeld=false;
-		currentBlock = new SquareBlock();
+		currentBlock = randomBlock();;
 		queue = new ArrayList<Block>();
 		for(int i=0;i<5;i++) {
-			randomBlock();
+			queue.add(randomBlock());
 		}
 		Clip line;
 		File soundFile = new File("Tetris.wav");
@@ -78,7 +92,6 @@ public class Tetris extends JPanel {
 			//whoops.
 		}
 		audioFormat = audioInputStream.getFormat();
-		System.out.println(audioFormat);
 		DataLine.Info info = new DataLine.Info(Clip.class, audioFormat); // format is an AudioFormat object
 		if (!AudioSystem.isLineSupported(info)) {
 		// Handling the error.
@@ -165,8 +178,17 @@ public class Tetris extends JPanel {
 	private class TimerListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(currentTime%dropTime==0||(fastFalling&&currentTime%30==0)) {
-				dropLogic();
+			if(isTouching()) {
+				if(groundTime<dropLock) {
+					groundTime+=deltaTime;
+				} else {
+					onContact();
+				}
+			} else {
+				groundTime=0;
+				if(currentTime%dropTime==0||(fastFalling&&currentTime%30==0)) {
+					currentBlock.setyLocation(currentBlock.getyLocation()+1);		
+				}
 			}
 			g.setColor(Color.black.brighter());
 			g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -221,22 +243,22 @@ public class Tetris extends JPanel {
 
 
 	}
-	public static void randomBlock() {
+	public static Block randomBlock() {
 		int rando=(int)(Math.random()*7);
 		if(rando==0) {
-			queue.add(new SquareBlock());
+			return new SquareBlock();
 		} else if(rando==1) {
-			queue.add(new TBlock());
+			return new TBlock();
 		} else if(rando==2) {
-			queue.add(new ZBlock());
+			return new ZBlock();
 		} else if(rando==3) {
-			queue.add(new BLBlock());
+			return new BLBlock();
 		} else if(rando==4) {
-			queue.add(new LBlock());
+			return new LBlock();
 		} else if(rando==5) {
-			queue.add(new LongBlock());
+			return new LongBlock();
 		} else {
-			queue.add(new SBlock());
+			return new SBlock();
 		}
 	}
 	public static boolean canMove(boolean isRight) {
@@ -286,14 +308,7 @@ public class Tetris extends JPanel {
 		frame.setVisible(true);
 	}
 	//to be called on a drop frame
-	public static void dropLogic() {
-		if(isTouching()) {
-			onContact();
-		} else {
-			currentBlock.setyLocation(currentBlock.getyLocation()+1);
 
-		}
-	}
 	//determines whether the block will hit something when it goes down
 	public static boolean isTouching() {
 		int[][] state = currentBlock.getCurrentStateMap();
@@ -351,7 +366,7 @@ public class Tetris extends JPanel {
 		currentBlock = queue.get(0);
 		hasHeld=false;
 		queue.remove(0);
-		randomBlock();
+		queue.add(randomBlock());
 		//add something to the queue
 		linescleared+=currentlinescleared;
 		score=score+currentlinescleared;
