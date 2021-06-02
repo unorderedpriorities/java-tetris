@@ -17,6 +17,16 @@ public class Block {
 		xLocation=3;
 		yLocation=0;
 	}
+	public Block(Block mainBlock) {
+		xLocation=mainBlock.getxLocation();
+		yLocation=mainBlock.getyLocation();
+		blockStates=mainBlock.getBlockStates();
+		color=Color.white;
+		currentState=mainBlock.getCurrentState();
+
+	}
+
+
 
 	//Attempts to rotate the block to the right direction, so all the checks happen in canRotate and reverts back to previous state if it cant
 	public void rotateRight(){
@@ -61,6 +71,8 @@ public class Block {
             }
         }
     }
+
+	
 	//draws an individual block at the spot in question
 	public void drawBlock(Graphics g, int x, int y, int size) {
 		g.setColor(color);
@@ -151,6 +163,10 @@ public class Block {
 	 */
 	public void setyLocation(int yLocation) {
 		this.yLocation = yLocation;
+	}
+
+	public int[][][] getBlockStates() {
+		return blockStates;
 	}
 	
 }
