@@ -11,7 +11,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.sound.sampled.*;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -32,11 +39,14 @@ public class Tetris extends JPanel {
 	public static Block heldBlock;
 	public static Color[][] matrix;
 	public static int score;
+	public static int linescleared;
+	public static boolean fastFalling;
 	public static ArrayList<Block> queue;
 	//change this to whatever object(s) you are animating
 	public int deltaTime=10;
 	public int currentTime=0;
 	public int dropTime=200;
+	
 	//Constructor required by BufferedImage
 
 	//sound hell
@@ -126,11 +136,22 @@ public class Tetris extends JPanel {
 					heldBlock.setxLocation(5);
 					currentBlock=temp;
 				}
+			}  
+			if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+				fastFalling=true;
 			}
+			if(e.getKeyCode()== KeyEvent.VK_ESCAPE) {
+				System.exit(0);
+			}
+			
 
 		  //INCOMPLETE
 		}
-		public void keyReleased(KeyEvent e) { }
+		public void keyReleased(KeyEvent e) {
+			if(e.getKeyCode()==KeyEvent.VK_DOWN) {
+				fastFalling=false;
+			}
+		 }
 		public void keyTyped(KeyEvent e) { }
 		}
 
@@ -138,7 +159,7 @@ public class Tetris extends JPanel {
 	private class TimerListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(currentTime%dropTime==0) {
+			if(currentTime%dropTime==0||(fastFalling&&currentTime%30==0)) {
 				dropLogic();
 			}
 			g.setColor(Color.black.brighter());
@@ -303,12 +324,10 @@ public class Tetris extends JPanel {
                 }
             }
         }
-
-
-
+		fastFalling=false;
 		//check to see if there's any cleared lines
 		//linescleared is amount of cleared lines
-		int linescleared=0;
+		int currentlinescleared=0;
 		for(int i=0;i<matrix.length;i++) {
 			//checks to see if the line is complete
 			boolean nonull=true;
@@ -318,7 +337,7 @@ public class Tetris extends JPanel {
 				}
 			}
 			if(nonull) {
-				linescleared++;
+				currentlinescleared++;
 				moveDown(i);
 			}
 		}
@@ -327,7 +346,8 @@ public class Tetris extends JPanel {
 		queue.remove(0);
 		randomBlock();
 		//add something to the queue
-		score=+linescleared;
+		linescleared+=currentlinescleared;
+		score=score+currentlinescleared;
 	}
 	public static void drawBlock(Graphics g, int x, int y, Color color) {
 		g.setColor(color);
@@ -358,4 +378,5 @@ public class Tetris extends JPanel {
 			matrix[0][n]=null;
 		}
 	}
+	
 }
