@@ -188,6 +188,7 @@ public class Tetris extends JPanel {
 					groundTime+=deltaTime;
 				} else {
 					onContact();
+					groundTime=0;
 				}
 			} else {
 				groundTime=0;
