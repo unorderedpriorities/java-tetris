@@ -85,37 +85,36 @@ public class Block {
 		int yLoc = getyLocation();
 		int xLoc = getxLocation();
 		int[] list = {0, 1, 2, -1, -2};
+		int[] list2 = {0, -1, 1};
 		Boolean returnval = true;
-		//for loop for checking the possible wall kicks
-		for(int k = 0; k < 5; k++){
-			xLoc = getxLocation() + list[k];
-			for(int i=0;i<state.length;i++) {
-				for(int n=0;n<state[i].length;n++){
-					//commented this out since it wasnt fully neccisary
-					/**if(state[i][n]==1){
-						System.out.println("YEEEE");
-						if((yLoc+i > 19 || xLoc+n > 9) || (yLoc+i < 0 || xLoc+n < 0) || !(Tetris.matrix[yLoc+i][xLoc+n]==null)) {
+		for(int m = 0; m < 3; m++) {
+			yLoc = getyLocation() + list2[m];
+			//for loop for checking the possible wall kicks
+			for (int k = 0; k < 5; k++) {
+				xLoc = getxLocation() + list[k];
+				for (int i = 0; i < state.length; i++) {
+					for (int n = 0; n < state[i].length; n++) {
+						//This checks if its out of bounds of the grid or if theres a piece at the location, basically checking if the rotation is legal
+						if ((yLoc + i > 19 || xLoc + n > 9) || (yLoc + i < 0 || xLoc + n < 0) || !(Tetris.matrix[yLoc + i][xLoc + n] == null)) {
 							returnval = false;
 							break;
-						}else{
+						} else {
 							returnval = true;
 						}
-					}**/
-					//This checks if its out of bounds of the grid or if theres a piece at the location, basically checking if the rotation is legal
-					if((yLoc+i > 19 || xLoc+n > 9) || (yLoc+i < 0 || xLoc+n < 0) || !(Tetris.matrix[yLoc+i][xLoc+n]==null)) {
-						returnval = false;
+					}
+					if (!returnval) {
 						break;
-					}else{
-						returnval = true;
 					}
 				}
-				if(!returnval){
+				if (returnval) {
+					//change hte xLocation if we've shifted it over for the wall-kick
+					setxLocation(xLoc);
 					break;
 				}
 			}
-			if(returnval){
+			if (returnval) {
 				//change hte xLocation if we've shifted it over for the wall-kick
-				setxLocation(xLoc);
+				setyLocation(yLoc);
 				break;
 			}
 		}
