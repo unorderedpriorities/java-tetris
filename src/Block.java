@@ -81,16 +81,42 @@ public class Block {
 
 	public boolean canRotate(){
 		int[][] state = this.getCurrentStateMap();
-		for(int i=0;i<state.length;i++) {
-			for(int n=0;n<state[i].length;n++){
-				if(state[i][n]==1){
-					if(!(Tetris.matrix[getyLocation()+i][getxLocation()+n]==null)) {
-						return false;
+		int yLoc = getyLocation();
+		int xLoc = getxLocation();
+		int[] list = {0, 1, 2, -1, -2};
+		Boolean returnval = true;
+		//for loop for checking the possible wall kicks
+		for(int k = 0; k < 5; k++){
+			xLoc = getxLocation() + list[k];
+			for(int i=0;i<state.length;i++) {
+				for(int n=0;n<state[i].length;n++){
+					//commented this out since it wasnt fully neccisary
+					/**if(state[i][n]==1){
+						System.out.println("YEEEE");
+						if((yLoc+i > 19 || xLoc+n > 9) || (yLoc+i < 0 || xLoc+n < 0) || !(Tetris.matrix[yLoc+i][xLoc+n]==null)) {
+							returnval = false;
+							break;
+						}else{
+							returnval = true;
+						}
+					}**/
+					if((yLoc+i > 19 || xLoc+n > 9) || (yLoc+i < 0 || xLoc+n < 0) || !(Tetris.matrix[yLoc+i][xLoc+n]==null)) {
+						returnval = false;
+						break;
+					}else{
+						returnval = true;
 					}
 				}
+				if(returnval == false){
+					break;
+				}
+			}
+			if(returnval == true){
+				setxLocation(xLoc);
+				break;
 			}
 		}
-		return true;
+		return returnval;
 	}
 
 	public Color getColor(){
