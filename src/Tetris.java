@@ -41,6 +41,7 @@ public class Tetris extends JPanel {
 	public static int score;
 	public static int linescleared;
 	public static boolean fastFalling;
+	public static boolean hasHeld;
 	public static ArrayList<Block> queue;
 	//change this to whatever object(s) you are animating
 	public int deltaTime=10;
@@ -61,6 +62,7 @@ public class Tetris extends JPanel {
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		matrix = new Color[20][10];
 		score = 0;
+		hasHeld=false;
 		currentBlock = new SquareBlock();
 		queue = new ArrayList<Block>();
 		for(int i=0;i<5;i++) {
@@ -122,19 +124,23 @@ public class Tetris extends JPanel {
 			} else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
 				hardDrop();
 			} else if(e.getKeyCode() == KeyEvent.VK_C) {
-				if(heldBlock==null) {
-					heldBlock=currentBlock;
-					heldBlock.setxLocation(5);
-					heldBlock.setyLocation(0);
-					currentBlock=queue.remove(0);
-					randomBlock();
+				//checks to see if the block has already been swapped
+				if(!hasHeld) {
+					if(heldBlock==null) {
+						heldBlock=currentBlock;
+						heldBlock.setxLocation(5);
+						heldBlock.setyLocation(0);
+						currentBlock=queue.remove(0);
+						randomBlock();
 
-				} else {
-					Block temp = heldBlock;
-					heldBlock=currentBlock;
-					heldBlock.setyLocation(0);
-					heldBlock.setxLocation(5);
-					currentBlock=temp;
+					} else {
+						Block temp = heldBlock;
+						heldBlock=currentBlock;
+						heldBlock.setyLocation(0);
+						heldBlock.setxLocation(5);
+						currentBlock=temp;
+					}
+					hasHeld=true;
 				}
 			}  
 			if(e.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -343,6 +349,7 @@ public class Tetris extends JPanel {
 		}
 		//move the queue into the current block
 		currentBlock = queue.get(0);
+		hasHeld=false;
 		queue.remove(0);
 		randomBlock();
 		//add something to the queue
