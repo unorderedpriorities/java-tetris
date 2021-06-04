@@ -73,7 +73,7 @@ public class Tetris extends JPanel {
 		g.setColor(Color.black.brighter());
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		//creates matrix
-		matrix = new Color[20][10];
+		matrix = new Color[21][10];
 		//score starts at zero
 		score = 0;
 		//the current block has not been swapped
@@ -218,14 +218,14 @@ public class Tetris extends JPanel {
 			for(int i=0;i<matrix.length;i++) {
 				for(int n=0;n<matrix[i].length;n++){
 					if(!(matrix[i][n]==null)){
-						drawBlock(g,(n+1)*size,(i+1)*size,matrix[i][n]);
+						drawBlock(g,(n+1)*size,(i)*size,matrix[i][n]);
 
 					}
 				}
 			}
-			ghostBlock.draw(g,(ghostBlock.getxLocation()+1)*size,(ghostBlock.getyLocation()+1)*size,size);
+			ghostBlock.draw(g,(ghostBlock.getxLocation()+1)*size,(ghostBlock.getyLocation())*size,size);
 
-			currentBlock.draw(g,(currentBlock.getxLocation()+1)*size,(currentBlock.getyLocation()+1)*size,size);
+			currentBlock.draw(g,(currentBlock.getxLocation()+1)*size,(currentBlock.getyLocation())*size,size);
 			g.setColor(Color.white);
 			g.setFont(new Font("Impact",Font.PLAIN,40));
 			g.drawString(score+"", 0, size);
