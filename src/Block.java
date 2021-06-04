@@ -92,7 +92,14 @@ public class Block {
 		return blockStates[getCurrentState()];
 	}
 
+	public boolean ableToRotate(){
+		return true;
+	}
+
 	public boolean canRotate(){
+		if(ableToRotate() == false){
+			return false;
+		}
 		int[][] state = this.getCurrentStateMap();
 		int yLoc = getyLocation();
 		int xLoc = getxLocation();

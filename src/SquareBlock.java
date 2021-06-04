@@ -48,7 +48,9 @@ public class SquareBlock extends Block {
                 },
         });
     }
-    
-    
-        
+
+    @Override
+    public boolean ableToRotate() {
+        return false;
+    }
 }
