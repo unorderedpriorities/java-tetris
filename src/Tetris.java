@@ -59,6 +59,8 @@ public class Tetris extends JPanel {
 	//ms spent touching ground
 	public static int groundTime=0;
 
+	public static boolean gameEnded = false;
+
 	
 
 	//sound hell
@@ -142,6 +144,8 @@ public class Tetris extends JPanel {
 				currentBlock.rotateRight();
 			} else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
 				hardDrop();
+			} else if (e.getKeyCode() == KeyEvent.VK_Z) {
+				currentBlock.rotateLeft();
 			} else if(e.getKeyCode() == KeyEvent.VK_C) {
 				//checks to see if the block has already been swapped
 				if(!hasHeld) {
@@ -184,6 +188,9 @@ public class Tetris extends JPanel {
 	private class TimerListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if(gameEnded){
+				return;
+			}
 			if(isTouching(currentBlock)) {
 				if(groundTime<dropLock) {
 					groundTime+=deltaTime;
@@ -380,6 +387,12 @@ public class Tetris extends JPanel {
 		}
 		//move the top of the queue into the current block
 		currentBlock = queue.remove(0);
+		//int[] list = {3, 4, 5, 6};
+		for(int i = 0; i < 4; i++){
+			if(matrix[0][i+3] != null){
+				 gameEnded = true;
+			}
+		}
 		//allows the held block to be taken again
 		hasHeld=false;
 		//add something to the queue
