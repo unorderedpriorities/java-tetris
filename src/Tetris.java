@@ -353,7 +353,7 @@ public class Tetris extends JPanel {
 	}
 
 	//to be called when a block collides with the ground
-	public static void onContact() {
+	static void onContact() {
 		//turn the current block into spots in the matrix
 		int[][] state = currentBlock.getCurrentStateMap();
         for(int i=0;i<state.length;i++) {
@@ -393,12 +393,13 @@ public class Tetris extends JPanel {
 				 gameEnded = true;
 			}
 		}
+		
 		//allows the held block to be taken again
 		hasHeld=false;
 		//add something to the queue
 		queue.add(randomBlock());
 		linescleared+=currentlinescleared;
-		score=score+(currentlinescleared^2)*(levels+1);
+		score+=Math.pow(currentlinescleared,2)*(levels+1);
 		levels=linescleared/10;
 		if(levels>17) {
 			dropTime=20;
