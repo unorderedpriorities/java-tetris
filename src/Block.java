@@ -47,16 +47,16 @@ public class Block {
 	public void rotateLeft()
 	{
 		this.currentState--;
-		if(!canRotate()){
-			this.currentState++;
-			return;
-		}
 		if(this.currentState < 0){
 			this.currentState = 3;
 			if(!canRotate()){
 				this.currentState = 0;
 				return;
 			}
+		}
+		if(!canRotate()){
+			this.currentState++;
+			return;
 		}
 	}
 	public void draw(Graphics g, int x, int y, int size) {

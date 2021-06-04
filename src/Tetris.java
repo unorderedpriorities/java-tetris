@@ -143,6 +143,8 @@ public class Tetris extends JPanel {
 				currentBlock.rotateRight();
 			} else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
 				hardDrop();
+			} else if (e.getKeyCode() == KeyEvent.VK_Z) {
+				currentBlock.rotateLeft();
 			} else if(e.getKeyCode() == KeyEvent.VK_C) {
 				//checks to see if the block has already been swapped
 				if(!hasHeld) {
