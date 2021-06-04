@@ -43,6 +43,7 @@ public class Tetris extends JPanel {
 	public static Color[][] matrix;
 	public static int score;
 	public static int linescleared;
+	public static int levels=1;;
 	//whether the down key is pressed
 	public static boolean fastFalling;
 	//whether the block has already been swapped for the held block
@@ -52,11 +53,11 @@ public class Tetris extends JPanel {
 	public int deltaTime=10;
 	public int currentTime=0;
 	//ms until dropping down one
-	public int dropTime=200;
+	public static int dropTime=200;
 	//ms until drop locking
 	public int dropLock=500;
 	//ms spent touching ground
-	public int groundTime=0;
+	public static int groundTime=0;
 
 	
 
@@ -242,10 +243,6 @@ public class Tetris extends JPanel {
 
 			repaint();
 			currentTime+=deltaTime;
-			//check to see if drop speed should be sped up
-			if(currentTime>1000*20&&currentTime<1000*40) {
-				dropTime=150;
-			}
 		}
 		
 	}
@@ -388,7 +385,14 @@ public class Tetris extends JPanel {
 		//add something to the queue
 		queue.add(randomBlock());
 		linescleared+=currentlinescleared;
-		score=score+currentlinescleared;
+		score=score+(currentlinescleared^2)*(levels+1);
+		levels=linescleared/10;
+		if(levels>17) {
+			dropTime=20;
+		} else {
+			dropTime=(200-(levels*10));
+		}
+
 	}
 	public static void drawBlock(Graphics g, int x, int y, Color color) {
 		g.setColor(color);
