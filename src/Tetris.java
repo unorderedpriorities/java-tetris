@@ -1,8 +1,6 @@
 
 //required import statements
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -16,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -67,6 +66,8 @@ public class Tetris extends JPanel {
 
 	public static boolean hasWrittenToFile = false;
 
+	private static Image endscreenBackground;
+
 	
 
 	//sound hell
@@ -89,7 +90,6 @@ public class Tetris extends JPanel {
 		hasHeld=false;
 		currentBlock = randomBlock();
 		ghostBlock = new Block(currentBlock);
-
 
 
 		queue = new ArrayList<Block>();
@@ -189,6 +189,7 @@ public class Tetris extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			if(gameEnded){
 				displayEndScreen(g);
+				repaint();
 				return;
 			}
 			if(isTouching(currentBlock)) {
@@ -426,19 +427,27 @@ public class Tetris extends JPanel {
 		}else{
 			return;
 		}
+		ArrayList<Integer> list = new ArrayList<Integer>();
 		try{
-			System.out.println("OOOO");
 			File file = new File("scoreboard.txt");
+	//		endscreenBackground = Toolkit.getDefaultToolkit().createImage(System.getProperty("user.dir") + "\\tetrisBackground.jpg");
+			try {
+				BufferedImage img = ImageIO.read(new File("tetrisBackground.jpg"));
+				g.drawImage(img, 0, 0 , null);
+				g.setColor(Color.CYAN);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			Scanner fileScanner = new Scanner(file);
-			ArrayList<Integer> list = new ArrayList<Integer>();
 			while(fileScanner.hasNextLine()){
 				list.add(fileScanner.nextInt());
 			}
-			list.add(score);
+			if(score > 0){
+				list.add(score);
+			}
 			Collections.sort(list);
 			Collections.reverse(list);
 			try{
-				System.out.println("dies");
 				FileWriter writer = new FileWriter("scoreboard.txt", false);
 				String txt = "";
 				for(int i = 0; i < list.size(); i++){
@@ -448,7 +457,6 @@ public class Tetris extends JPanel {
 					}
 					txt += list.get(i) + "\n";
 				}
-				System.out.println(txt);
 				writer.write(txt);
 				writer.close();
 			}catch (IOException e) {
@@ -456,6 +464,43 @@ public class Tetris extends JPanel {
 			}
 		}catch (FileNotFoundException exception){
 			return;
+		}
+		g.drawString("Round Score: " + score, WIDTH/2 - 80, 100);
+		int place = 0;
+		String placementType = "";
+		for(int i = 0; i < list.size(); i++){
+			if(list.get(i) == score){
+				place = i+1;
+				break;
+			}
+		}
+		String txt = String.valueOf(place);
+		switch(txt.charAt(txt.length()-1)){
+			case '1':
+				placementType = "st";
+				break;
+			case '2':
+				placementType = "nd";
+				break;
+			case '3':
+				placementType = "rd";
+				break;
+			default:
+				placementType = "th";
+				break;
+		}
+		if(score == 0){
+			g.drawString("Round Score: " + score + ", Failed Attempt", WIDTH / 2 - 80, 100);
+
+		}else {
+			g.drawString("Round Score: " + score + ",  " + place + placementType, WIDTH / 2 - 80, 100);
+		}
+		g.drawString("--Top Rounds--", WIDTH / 2 - 60, 200);
+		for(int i = 0; i < 5; i++){
+			if(i+1 > list.size()){
+				break;
+			}
+			g.drawString(String.valueOf(list.get(i)), WIDTH / 2 - 300, 420 + (i*60));
 		}
 
 	}
