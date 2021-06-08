@@ -9,8 +9,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -59,6 +63,8 @@ public class Tetris extends JPanel {
 	public int groundTime=0;
 
 	public static boolean gameEnded = false;
+
+	public static boolean hasWrittenToFile = false;
 
 	
 
@@ -131,14 +137,10 @@ public class Tetris extends JPanel {
 				if(canMove(true)) {
 					currentBlock.setxLocation(currentBlock.getxLocation()+1);
 				}
-
-
 			} else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
 				if(canMove(false)) {
 					currentBlock.setxLocation(currentBlock.getxLocation()-1);
 				}
-
-			
 			} else if(e.getKeyCode() == KeyEvent.VK_UP) {
 				currentBlock.rotateRight();
 			} else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
@@ -154,7 +156,6 @@ public class Tetris extends JPanel {
 						heldBlock.setyLocation(0);
 						currentBlock=queue.remove(0);
 						randomBlock();
-
 					} else {
 						Block temp = heldBlock;
 						heldBlock=currentBlock;
@@ -171,8 +172,6 @@ public class Tetris extends JPanel {
 			if(e.getKeyCode()== KeyEvent.VK_ESCAPE) {
 				System.exit(0);
 			}
-			
-
 		  //INCOMPLETE
 		}
 		public void keyReleased(KeyEvent e) {
@@ -188,6 +187,7 @@ public class Tetris extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(gameEnded){
+				displayEndScreen(g);
 				return;
 			}
 			if(isTouching(currentBlock)) {
@@ -412,6 +412,46 @@ public class Tetris extends JPanel {
 		g.drawLine(x, y, x, y+size);
 		g.drawLine(x, y+size, x+size, y+size);
 
+
+	}
+
+	public static void displayEndScreen(Graphics g){
+		if(hasWrittenToFile == false){
+			hasWrittenToFile = true;
+		}else{
+			return;
+		}
+		try{
+			System.out.println("OOOO");
+			File file = new File("scoreboard.txt");
+			Scanner fileScanner = new Scanner(file);
+			ArrayList<Integer> list = new ArrayList<Integer>();
+			while(fileScanner.hasNextLine()){
+				list.add(fileScanner.nextInt());
+			}
+			list.add(score);
+			Collections.sort(list);
+			Collections.reverse(list);
+			try{
+				System.out.println("dies");
+				FileWriter writer = new FileWriter("scoreboard.txt", false);
+				String txt = "";
+				for(int i = 0; i < list.size(); i++){
+					if(i == list.size()-1){
+						txt += list.get(i);
+						break;
+					}
+					txt += list.get(i) + "\n";
+				}
+				System.out.println(txt);
+				writer.write(txt);
+				writer.close();
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+		}catch (FileNotFoundException exception){
+			return;
+		}
 
 	}
 	//call to clear a line and move the ones above it down one
