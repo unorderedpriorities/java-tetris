@@ -49,4 +49,9 @@ public class ZBlock extends Block {
         });
     }
 
+
+    public static void main(String[] args){
+
+    }
+
 }
