@@ -1,2 +1,3 @@
 # java-tetris
-A version of Tetris, created entirely in Java. Currently in progress.
+A version of Tetris, created entirely in Java.
+To run, just clone and run Tetris.java.
